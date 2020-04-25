@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            li img {
+                max-width: 200px;
+                max-height: 200px;
+            }
+
+            li {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+        </style> 
+    </head>
+    <body>
+        <input type="text">
+        <button onclick='displaySearch()'>Search</button>
+        <ul class="list">
+
+        </ul>
+
+        <script>
+            async function displaySearch() {
+                const searchData = await fetchData();
+                const list = document.querySelector('.list');
+                list.innerHTML = '';
+                searchData.forEach(item => {
+                    let newLi = document.createElement('li');
+                    let span = document.createElement('span');
+                    let spanText = document.createTextNode(`Title: ${item.title} | Price: ${item.price} | Supplier: ${item.supplier}`);
+                    span.appendChild(spanText);
+                    let img = document.createElement('img');
+                    img.src = item.image;
+                    newLi.appendChild(span);
+                    newLi.appendChild(img);
+                    list.appendChild(newLi);
+                });
+            }
+
+            async function fetchData() {
+                const search_param = document.querySelector('input').value;
+                const search = search_param.replace(/\s/g, '+');
+                const amazonData = await fetch(`http://localhost:8080/amazon?search=${search}`);
+                const walmartData = await fetch(`http://localhost:8080/walmart?search=${search}`);
+                const json = await walmartData.json();
+                const amazonJson = await amazonData.json();
+                json.push(...amazonJson);
+                return json;
+            }
+        </script>
+    </body>
+</html>

@@ -9,6 +9,7 @@
     "type": "git",
     "url": "https://github.com/GoogleCloudPlatform/nodejs-docs-samples.git"
   },
+  "main": "app.js",
   "engines": {
     "node": ">=8.0.0"
   },
